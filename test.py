@@ -27,7 +27,7 @@ def obtenerContornos(arr):
 				i += 1
 			#Verifica si la tupla en c1 es menor a la tupla en c2
 			elif(c1[i][0] < c2[j][0]):
-				print("CD")
+				print("CDE")
 				if(j == 0):
 					print("C")
 					c3.append(c1[i])
@@ -35,11 +35,12 @@ def obtenerContornos(arr):
 					print("D")
 					c3.append(c1[i])
 				elif(c1[i][1] < c2[j-1][1] and c1[i-1][1] > c2[j-1][1]):
+					print("E")
 					c3.append((c1[i][0],c2[j-1][1]))
 				i += 1
 			#Verifica si la tupla en c2 es menor a la tupla en c1
 			elif(c1[i][0] > c2[j][0]):
-				print("FG")
+				print("FGH")
 				if(i == 0):
 					print("F")
 					c3.append(c2[j])
@@ -47,6 +48,7 @@ def obtenerContornos(arr):
 					print("G")
 					c3.append(c2[j])
 				elif(c2[j][1] < c1[i-1][1] and c2[j-1][1] > c1[i-1][1]):
+					print("H")
 					c3.append((c2[j][0],c1[i-1][1]))
 				j += 1
 			#misma coord x
@@ -64,13 +66,13 @@ def obtenerContornos(arr):
 		print(c3)
 		return c3
 
-'''n = int(raw_input("Ingrese cantidad edificios\n"))
+n = int(raw_input("Ingrese cantidad edificios\n"))
 m = []
 for i in range(n):
 	c = raw_input("ingrese coordenadas\n")
 	c=map(int,c.split(" "))
 	m.append(tuple(c))
-'''
 
-m = [(1,3,3),(2,4,4),(5,2,8),(6,5,7),(8,4,9)]
+
+#m = [(1,3,3),(2,4,4),(5,2,8),(6,5,7),(8,4,9)]
 print(obtenerContornos(m))
