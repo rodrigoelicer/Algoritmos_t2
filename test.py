@@ -1,7 +1,7 @@
 def obtenerContornos(arr):
 	if(len(arr) <=1):
 		#Caso base donde transforma 1 3-tupla de 1 edificio en 2 2-tuplas
-		#Ej: (1,3,3) -> [(1,3),(3,0)]
+		#Ej: [(1,3,3)] -> [(1,3),(3,0)]
 		return [(arr[0][0],arr[0][1]),(arr[0][2],0)]
 	else:
 		#Conquistar
