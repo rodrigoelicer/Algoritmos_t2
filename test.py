@@ -64,18 +64,43 @@ def obtenerContornos(arr):
 					print("H")
 					c3.append((c2[j][0],c1[i-1][1]))
 				j += 1
-			#misma coord x
+			#misma coordenada x
 			else:
-				print("IJ")
-				#Se queda con la altura que se mayor de los 2
-				if(c1[i][1] > c2[j][1]):
-					print("I")
-					c3.append(c1[i])
-					i += 1
-				else:
-					print("J")
+				print("IJKLMN")
+				#Ambos contornos inician donde mismo
+				if(j==0 and i==0):
+					print("IJ")
+					if(c1[i][1] > c2[j][1]):
+						print("I")
+						c3.append(c1[i])
+					else:
+						print("J")
+						c3.append(c2[j])
+				#Contorno 2 está en el inicio
+				elif(j==0):
+					print("K1")
+					#Si no hay continuidad (misma altura), se agrega la tupla
+					if(c2[j][1] != c1[i-1][1]):
+						print("K2")
+						c3.append(c2[j])
+				#Contorno 1 está en el inicio
+				elif(i==0):
+					print("L1")
+					#Si no hay continuidad (misma altura), se agrega la tupla
+					if(c1[i][1] != c2[j-1][1]):
+						print("L2")
+						c3.append(c1[i])
+				#Si no hay continuidad (misma altura), se agrega la tupla
+				elif(c2[j][1] != c1[i-1][1]):
+					print("M")
 					c3.append(c2[j])
-					j += 1
+				#Si no hay continuidad (misma altura), se agrega la tupla
+				elif(c1[i][1] != c2[j-1][1]):
+					print("N")
+					c3.append(c1[i])
+
+				j += 1
+				i += 1
 
 		print(c3)
 		return c3
