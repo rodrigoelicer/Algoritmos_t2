@@ -36,22 +36,122 @@ vectorList obtenerContorno(vectorList edificios){
 	vectorList::const_iterator middle = edificios.begin() + n/2;
 	vectorList::const_iterator end = edificios.end();
 
-	vectorList temp1 (first,middle);
-	vectorList temp2 (middle,end);
+	vectorList c1 (first,middle);
+	vectorList c2 (middle,end);
 
-	temp1 = obtenerContorno(temp1);
-	temp2 = obtenerContorno(temp2);
+	c1 = obtenerContorno(c1);
+	c2 = obtenerContorno(c2);
 
-	vectorList temp3;
-	int i = 0, j = 0;
+	size_t i = 0, j = 0;
 
-	/*vectorList temp3;
-	temp3.reserve( temp1.size() + temp2.size() ); // preallocate memory
-	temp3.insert( temp3.end(), temp1.begin(), temp1.end() );
-	temp3.insert( temp3.end(), temp2.begin(), temp2.end() );*/
+	vectorList c3;
+	size_t n1 = c1.size();
+	size_t n2 = c2.size();
+	while(i<n1 || j<n2){
+		//Se acaba el contorno 1
+		if(i == n1){
+			cout << "A" << endl;
+			c3.push_back(c2.at(j));
+			j++;
+		}
+		//Se acaba el contorno 2
+		else if(j == n2){
+			cout << "B" << endl;
+			c3.push_back(c1.at(i));
+			i++;
+		}
+		//Verifica si la tupla en c1 es menor a la tupla en c2
+		else if( get<0>(c1.at(i)) < get<0>(c2.at(j)) ){
+			cout << "CDE" << endl;
+			//Si no ha habido un elemento de c2 menor a c1
+			if(j == 0){
+				cout << "C" << endl;
+				c3.push_back(c1.at(i));
+			}
+			//Si la altura en c1 es mayor a la altura previa de c2 (c2[j-1])
+			else if( get<1>(c1.at(i)) > get<1>(c2.at(j-1)) ){
+				cout << "D" << endl;
+				c3.push_back(c1.at(i));
+			}
+			//Si la altura de c1[i] es menor a la altura previa de c2[j] (c2[j-1]),
+			//PERO al mismo tiempo la altura previa de c1 (c1[i-1]) es mayor
+			//a la altura previa de c2 (c2[j-1])
+			else if(i!=0 && get<1>(c1.at(i)) < get<1>(c2.at(j-1))
+						&& get<1>(c1.at(i-1)) > get<1>(c2.at(j-1)) ){
+				cout << "E" << endl;
+				c3.push_back(
+					tuple<int, int, int>(get<0>(c1.at(i)),get<1>(c2.at(j-1)),-1)
+				);
+			}
+			i++;
+		}
+		//Verifica si la tupla en c2 es menor a la tupla en c1
+		else if( get<0>(c1.at(i)) > get<0>(c2.at(j)) ){
+			cout << "FGH" << endl;
+			//Si no ha habido un elemento de c1 menor a c2
+			if(i == 0){
+				cout << "F" << endl;
+				c3.push_back(c2.at(j));
+			}
+			//Si la altura en c2 es mayor a la altura previa de c1 (c1[i-1])
+			else if( get<1>(c2.at(j)) > get<1>(c1.at(i-1)) ){
+				cout << "G" << endl;
+				c3.push_back(c2.at(j));
+			}
+			//Si la altura de c2[j] es menor a la altura previa de c1[i] (c1[i-1]),
+			//PERO al mismo tiempo la altura previa de c2 (c2[j-1]) es mayor
+			//a la altura previa de c1 (c1[i-1])
+			else if( j!=0 && get<1>(c2.at(j)) < get<1>(c1.at(i-1))
+						&& get<1>(c2.at(j-1)) > get<1>(c1.at(i-1)) ){
+				cout << "H" << endl;
+				c3.push_back(
+					tuple<int, int, int>(get<0>(c2.at(j)),get<1>(c1.at(i-1)),-1)
+				);
+			}
+			j++;
+		}
+		//mismas coordenadas x
+		else{
+			cout << "IJKLMN" << endl;
+			if(j == 0 && i == 0){
+				cout << "IJ" << endl;
+				if( get<1>(c1.at(i)) > get<1>(c2.at(j)) ){
+					cout << "I" << endl;
+					c3.push_back(c1.at(i));
+				}
+				else{
+					c3.push_back(c2.at(j));
+				}
+			}
+			else if(j == 0){
+				cout << "K1" << endl;
+				if( get<1>(c2.at(j)) != get<1>(c1.at(i-1)) ){
+					cout << "K2" << endl;
+					c3.push_back(c2.at(j));
+				}
+			}
+			else if(i == 0){
+				cout << "L1" << endl;
+				if( get<1>(c1.at(i)) != get<1>(c2.at(j-1)) ){
+					cout << "L2" << endl;
+					c3.push_back(c1.at(i));
+				}
+			}
+			else if( get<1>(c2.at(j)) != get<1>(c1.at(i-1)) ){
+				cout << "M" << endl;
+				c3.push_back(c2.at(j));
+			}
+			else if( get<1>(c1.at(i)) != get<1>(c2.at(j-1)) ){
+				cout << "N" << endl;
+				c3.push_back(c1.at(i));
+			}
 
-	//temp.push_back( tuple<int, int, int>(1,2,3) );
-	return temp3;
+			j++;
+			i++;
+		}
+	}
+	imprimirVector(c3,0);
+	return c3;
 
 }
 
@@ -70,10 +170,12 @@ int main()
 		edificios.push_back( tuple<int, int, int>(L,H,R) );
 	}
 
+	cout << "Edificios: ";
 	imprimirVector(edificios,1);
 
 	contorno = obtenerContorno(edificios);
 
+	cout << "Contorno final: ";
 	imprimirVector(contorno,0);
 
     return 0;
