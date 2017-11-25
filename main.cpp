@@ -113,6 +113,7 @@ vectorList obtenerContorno(vectorList edificios){
 		//mismas coordenadas x
 		else{
 			cout << "IJKLMN" << endl;
+			//Ambos contornos inician donde mismo
 			if(j == 0 && i == 0){
 				cout << "IJ" << endl;
 				if( get<1>(c1.at(i)) > get<1>(c2.at(j)) ){
@@ -123,24 +124,30 @@ vectorList obtenerContorno(vectorList edificios){
 					c3.push_back(c2.at(j));
 				}
 			}
+			//Contorno 2 está en el inicio
 			else if(j == 0){
 				cout << "K1" << endl;
+				//Si no hay continuidad (misma altura), se agrega la tupla
 				if( get<1>(c2.at(j)) != get<1>(c1.at(i-1)) ){
 					cout << "K2" << endl;
 					c3.push_back(c2.at(j));
 				}
 			}
+			//Contorno 1 está en el inicio
 			else if(i == 0){
 				cout << "L1" << endl;
+				//Si no hay continuidad (misma altura), se agrega la tupla
 				if( get<1>(c1.at(i)) != get<1>(c2.at(j-1)) ){
 					cout << "L2" << endl;
 					c3.push_back(c1.at(i));
 				}
 			}
+			//Si no hay continuidad (misma altura), se agrega la tupla
 			else if( get<1>(c2.at(j)) != get<1>(c1.at(i-1)) ){
 				cout << "M" << endl;
 				c3.push_back(c2.at(j));
 			}
+			//Si no hay continuidad (misma altura), se agrega la tupla
 			else if( get<1>(c1.at(i)) != get<1>(c2.at(j-1)) ){
 				cout << "N" << endl;
 				c3.push_back(c1.at(i));
