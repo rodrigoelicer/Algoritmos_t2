@@ -108,14 +108,43 @@ def obtenerContornos(arr):
 		print(c3)
 		return c3
 
+def colision(contorno,dron):
+	if (len(contorno) == 0):
+		return False
+	else:
+		medio = len(contorno)/2
+		print "Mitad contorno X: "+ str(contorno[medio][0])
+		print "Dron X: "+ str(list(dron)[0])
+		if contorno[medio][0] == list(dron)[0]:
+			return True
+		else:
+			if (list(dron)[0] < contorno[medio][0]):
+				print("1: "+str(contorno[0:medio]))
+				return colision(contorno[0:medio],dron)
+			else:
+				print("2: "+str(contorno[medio+1:]))
+				return colision(contorno[medio+1:],dron)
+
+
 n = int(raw_input("Ingrese cantidad edificios\n"))
 m = []
 for i in range(n):
 	c = raw_input("ingrese coordenadas\n")
-	c=map(int,c.split(" "))
+	c = map(int,c.split(" "))
 	m.append(tuple(c))
 
+u = obtenerContornos(m)
+print(u)
 
-#m = [(1,3,3),(2,4,4),(5,2,8),(6,5,7),(8,4,9)]
+t = int(raw_input("Ingrese cantidad drones\n"))
+for i in range(t):
+	w = raw_input("ingrese coordenadas drones\n")
+	w = map(int,w.split(" "))
+	print( colision(u,tuple(w)) )
+
+# 5
+# [(1,3,3),(2,4,4),(5,2,8),(6,5,7),(8,4,9)]
 # [(1,3),(2,4),(4,0),(5,2),(6,5),(7,2),(8,4),(9,0)]
-print(obtenerContornos(m))
+# 3
+# (4,2), (1,7), (2,1)
+# true, false, true
