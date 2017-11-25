@@ -115,14 +115,42 @@ def colision(contorno,dron):
 		medio = len(contorno)/2
 		print "Mitad contorno X: "+ str(contorno[medio][0])
 		print "Dron X: "+ str(list(dron)[0])
-		if contorno[medio][0] == list(dron)[0]:
-			return True
+		#Cae justo en una coordenada del contorno
+		if (contorno[medio][0] == list(dron)[0]):
+			print("12")
+			#Si la altura es mayor
+			if(contorno[medio][1] >= list(dron)[1]):
+				print("1")
+				return True
+			#Si la altura es menor, no necesariamente significa que no vaya
+			#a chocar. Puede darse el caso donde se termina un edificio. Habrá
+			#que verificar que la altura de la coord anterior también es mayor
+			else:
+				print("2")
+				if(contorno[medio-1][1] >= list(dron)[1]):
+					print("2.1")
+					return True
+				#El dron está más alto que la coordenada y la coord anterior.
+				else:
+					return False
+		#Verifica cuando el dron está entre medio de 2 coordenadas
+		elif(contorno[medio-1][0] <= list(dron)[0]):
+			print("34")
+			#contorno es más alto, por lo que choca
+			if(contorno[medio-1][1] >= list(dron)[1]):
+				print("3")
+				return True
+			#no choca
+			else:
+				print("4")
+				return False
+		#recursividad, sigue buscando
 		else:
 			if (list(dron)[0] < contorno[medio][0]):
-				print("1: "+str(contorno[0:medio]))
+				print("5: "+str(contorno[0:medio]))
 				return colision(contorno[0:medio],dron)
 			else:
-				print("2: "+str(contorno[medio+1:]))
+				print("6: "+str(contorno[medio+1:]))
 				return colision(contorno[medio+1:],dron)
 
 
