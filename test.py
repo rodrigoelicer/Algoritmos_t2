@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 def obtenerContornos(arr):
 	if(len(arr) <=1):
 		#Caso base donde transforma 1 3-tupla de 1 edificio en 2 2-tuplas
@@ -13,7 +16,7 @@ def obtenerContornos(arr):
 		print("c1: "+str(c1))
 		print("c2: "+str(c2))
 
-		#arreglo temporal, en C habr que liberarlo cada vez
+		#arreglo temporal, en C habrá que liberarlo cada vez
 		c3 = []
 
 		#Itera hasta que se haya recorrido ambos contornos
@@ -42,7 +45,7 @@ def obtenerContornos(arr):
 				#Si la altura de c1[i] es menor a la altura previa de c2[j] (c2[j-1]),
 				#PERO al mismo tiempo la altura previa de c1 (c1[i-1]) es mayor
 				#a la altura previa de c2 (c2[j-1])
-				elif(c1[i][1] < c2[j-1][1] and c1[i-1][1] > c2[j-1][1]):
+				elif(i!= 0 and c1[i][1] < c2[j-1][1] and c1[i-1][1] > c2[j-1][1]):
 					print("E")
 					c3.append((c1[i][0],c2[j-1][1]))
 				i += 1
@@ -60,7 +63,7 @@ def obtenerContornos(arr):
 				#Si la altura de c2[j] es menor a la altura previa de c1[i] (c1[i-1]),
 				#PERO al mismo tiempo la altura previa de c2 (c2[j-1]) es mayor
 				#a la altura previa de c1 (c1[i-1])
-				elif(c2[j][1] < c1[i-1][1] and c2[j-1][1] > c1[i-1][1]):
+				elif(j!= 0 and c2[j][1] < c1[i-1][1] and c2[j-1][1] > c1[i-1][1]):
 					print("H")
 					c3.append((c2[j][0],c1[i-1][1]))
 				j += 1
