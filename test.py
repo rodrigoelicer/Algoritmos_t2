@@ -109,6 +109,8 @@ def obtenerContornos(arr):
 		return c3
 
 def colision(contorno,dron):
+	if(list(dron)[1] == 0):
+		return True
 	if (len(contorno) == 0):
 		return False
 	else:
@@ -134,7 +136,7 @@ def colision(contorno,dron):
 				else:
 					return False
 		#Verifica cuando el dron está entre medio de 2 coordenadas
-		elif(contorno[medio-1][0] <= list(dron)[0]):
+		elif( contorno[medio][0] > list(dron)[0] and contorno[medio-1][0] <= list(dron)[0]):
 			print("34")
 			#contorno es más alto, por lo que choca
 			if(contorno[medio-1][1] >= list(dron)[1]):
