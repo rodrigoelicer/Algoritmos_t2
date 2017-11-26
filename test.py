@@ -108,14 +108,73 @@ def obtenerContornos(arr):
 		print(c3)
 		return c3
 
+def colision(contorno,dron):
+	if(list(dron)[1] == 0):
+		return True
+	if (len(contorno) == 0):
+		return False
+	else:
+		medio = len(contorno)/2
+		print "Mitad contorno X: "+ str(contorno[medio][0])
+		print "Dron X: "+ str(list(dron)[0])
+		#Cae justo en una coordenada del contorno
+		if (contorno[medio][0] == list(dron)[0]):
+			print("12")
+			#Si la altura es mayor
+			if(contorno[medio][1] >= list(dron)[1]):
+				print("1")
+				return True
+			#Si la altura es menor, no necesariamente significa que no vaya
+			#a chocar. Puede darse el caso donde se termina un edificio. Habrá
+			#que verificar que la altura de la coord anterior también es mayor
+			else:
+				print("2")
+				if(contorno[medio-1][1] >= list(dron)[1]):
+					print("2.1")
+					return True
+				#El dron está más alto que la coordenada y la coord anterior.
+				else:
+					return False
+		#Verifica cuando el dron está entre medio de 2 coordenadas
+		elif( contorno[medio][0] > list(dron)[0] and contorno[medio-1][0] <= list(dron)[0]):
+			print("34")
+			#contorno es más alto, por lo que choca
+			if(contorno[medio-1][1] >= list(dron)[1]):
+				print("3")
+				return True
+			#no choca
+			else:
+				print("4")
+				return False
+		#recursividad, sigue buscando
+		else:
+			if (list(dron)[0] < contorno[medio][0]):
+				print("5: "+str(contorno[0:medio]))
+				return colision(contorno[0:medio],dron)
+			else:
+				print("6: "+str(contorno[medio+1:]))
+				return colision(contorno[medio+1:],dron)
+
+
 n = int(raw_input("Ingrese cantidad edificios\n"))
 m = []
 for i in range(n):
 	c = raw_input("ingrese coordenadas\n")
-	c=map(int,c.split(" "))
+	c = map(int,c.split(" "))
 	m.append(tuple(c))
 
+u = obtenerContornos(m)
+print(u)
 
-#m = [(1,3,3),(2,4,4),(5,2,8),(6,5,7),(8,4,9)]
+t = int(raw_input("Ingrese cantidad drones\n"))
+for i in range(t):
+	w = raw_input("ingrese coordenadas drones\n")
+	w = map(int,w.split(" "))
+	print( colision(u,tuple(w)) )
+
+# 5
+# [(1,3,3),(2,4,4),(5,2,8),(6,5,7),(8,4,9)]
 # [(1,3),(2,4),(4,0),(5,2),(6,5),(7,2),(8,4),(9,0)]
-print(obtenerContornos(m))
+# 3
+# (4,2), (1,7), (2,1)
+# true, false, true
