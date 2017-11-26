@@ -43,6 +43,11 @@ vectorList obtenerContorno(vectorList edificios){
 	c1 = obtenerContorno(c1);
 	c2 = obtenerContorno(c2);
 
+	cout << "Contorno1: ";
+	imprimirVector(c1,0);
+	cout << "Contorno2: ";
+	imprimirVector(c2,0);
+
 	size_t i = 0, j = 0;
 
 	vectorList c3;
@@ -128,30 +133,40 @@ vectorList obtenerContorno(vectorList edificios){
 			//Contorno 2 está en el inicio
 			else if(j == 0){
 				cout << "K1" << endl;
-				//Si no hay continuidad (misma altura), se agrega la tupla
-				if( get<1>(c2.at(j)) != get<1>(c1.at(i-1)) ){
-					cout << "K2" << endl;
+				//Si c1 tiene altura mayor, se agrega c1
+				if( get<1>(c2.at(j)) < get<1>(c1.at(i)) ){
+					cout << "K1.1" << endl;
+					c3.push_back(c1.at(i));
+				}
+				//Si no tienen la misma altura, se agrega la tupla
+				else if( get<1>(c2.at(j)) != get<1>(c1.at(i-1)) ){
+					cout << "K1.2" << endl;
 					c3.push_back(c2.at(j));
 				}
 			}
 			//Contorno 1 está en el inicio
 			else if(i == 0){
 				cout << "L1" << endl;
-				//Si no hay continuidad (misma altura), se agrega la tupla
-				if( get<1>(c1.at(i)) != get<1>(c2.at(j-1)) ){
-					cout << "L2" << endl;
+				//Si c2 tiene altura mayor, se agrega c2
+				if( get<1>(c1.at(i)) < get<1>(c2.at(j)) ){
+					cout << "L1.1" << endl;
+					c3.push_back(c2.at(j));
+				}
+				//Si no tienen la misma altura, se agrega la tupla
+				else if( get<1>(c1.at(i)) != get<1>(c2.at(j-1)) ){
+					cout << "L1.2" << endl;
 					c3.push_back(c1.at(i));
 				}
 			}
-			//Si no hay continuidad (misma altura), se agrega la tupla
-			else if( get<1>(c2.at(j)) != get<1>(c1.at(i-1)) ){
+			else if( get<1>(c2.at(j)) < get<1>(c1.at(i))
+						&& get<1>(c1.at(i)) != get<1>(c2.at(j-1)) ){
 				cout << "M" << endl;
-				c3.push_back(c2.at(j));
-			}
-			//Si no hay continuidad (misma altura), se agrega la tupla
-			else if( get<1>(c1.at(i)) != get<1>(c2.at(j-1)) ){
-				cout << "N" << endl;
 				c3.push_back(c1.at(i));
+			}
+			else if( get<1>(c1.at(i)) < get<1>(c2.at(j))
+						&& get<1>(c2.at(j)) != get<1>(c1.at(i-1)) ){
+				cout << "N" << endl;
+				c3.push_back(c2.at(j));
 			}
 
 			j++;
@@ -169,6 +184,7 @@ void colision(vectorList contorno, dronCoord dron){
 		cout << "true" << endl;
 		return;
 	}
+	//Está fuera de los límites, por lo tanto no choca
 	if(contorno.size() == 0){
 		cout << "false" << endl;
 		return;
