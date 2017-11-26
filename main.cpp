@@ -225,7 +225,14 @@ int main()
 
 	contorno = obtenerContorno(edificios);
 
+	cout << contorno.size() << endl;
+
+	for(size_t i = 0; i<contorno.size(); i++){
+		cout << get<0>(contorno.at(i)) << " " << get<1>(contorno.at(i)) << endl;
+	}
+
 	cin >> n;
+	cout << n << endl;
 
 	for(int i = 0; i<n; i++){
 		cin >> X >> Y;
