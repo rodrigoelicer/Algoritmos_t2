@@ -144,6 +144,9 @@ vectorList obtenerContorno(vectorList &edificios){
 					c3.push_back(c2.at(j));
 				}
 			}
+			else if( get<1>(c1.at(i)) == get<1>(c2.at(j)) ){
+				c3.push_back(c2.at(j));
+			}
 
 			j++;
 			i++;
