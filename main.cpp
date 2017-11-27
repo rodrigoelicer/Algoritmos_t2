@@ -24,7 +24,7 @@ void imprimirVector(vectorList v, int mark){
 	cout << "]" << endl;
 }
 
-void compararMenorConMayor(vectorList A, auto i, vectorList B, auto j, vectorList &c3){
+void compararMenorConMayor(vectorList &A, size_t i, vectorList &B, size_t j, vectorList &c3){
 	//Si no ha habido un elemento de B menor a A
 	if(j == 0){
 		//cout << "C" << endl;
@@ -52,7 +52,7 @@ void compararMenorConMayor(vectorList A, auto i, vectorList B, auto j, vectorLis
 	}
 }
 
-vectorList obtenerContorno(vectorList edificios){
+vectorList obtenerContorno(vectorList &edificios){
 	if(edificios.size() <= 1){
 		vectorList temp;
 		auto v = edificios.at(0);
@@ -154,7 +154,7 @@ vectorList obtenerContorno(vectorList edificios){
 
 }
 
-void colision(vectorList contorno, unsigned start, unsigned end, dronCoord dron){
+void colision(vectorList &contorno, unsigned start, unsigned end, dronCoord &dron){
 	//cout << "Start: " << start << endl;
 	//cout << "End: " << end << endl;
 	if( get<1>(dron) == 0 ){
@@ -292,7 +292,8 @@ int main()
 	for(int i = 0; i<n; i++){
 		cin >> X >> Y;
 		//cout << "ingresaste: " << X << Y << endl;
-		colision( contorno, 0, contorno.size(), tuple<unsigned int, unsigned int>(X,Y) );
+		dronCoord dron ( tuple<unsigned int, unsigned int>(X,Y) );
+		colision( contorno, 0, contorno.size(), dron );
 	}
 
     return 0;
