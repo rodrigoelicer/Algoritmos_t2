@@ -45,6 +45,11 @@ void compararMenorConMayor(vectorList A, auto i, vectorList B, auto j, vectorLis
 			tuple<unsigned int, unsigned int, unsigned int>(get<0>(A.at(i)), get<1>(B.at(j-1)),0)
 		);
 	}
+	else if( i!=0 && get<1>(A.at(i)) == get<1>(B.at(j-1))
+				&& get<1>(A.at(i-1)) > get<1>(B.at(j-1)) ){
+		//cout << "Z" << endl;
+		c3.push_back(A.at(i));
+	}
 }
 
 vectorList obtenerContorno(vectorList edificios){
@@ -148,87 +153,6 @@ vectorList obtenerContorno(vectorList edificios){
 	return c3;
 
 }
-
-/*void colision(vectorList contorno, dronCoord dron){
-	//Caso donde el dron va por el suelo, sólo por si las moscas
-	if( get<1>(dron) == 0 ){
-		cout << "true" << endl;
-		return;
-	}
-	//Está fuera de los límites, por lo tanto no choca
-	if(contorno.size() == 0){
-		cout << "false" << endl;
-		return;
-	}
-	else{
-		size_t medio = contorno.size()/2;
-		//cout << "Mitad contorno X: " << get<0>(contorno.at(medio)) << endl;
-		//cout << "Dron X: " << get<0>(dron) << endl;
-		//Cae justo en una coordenada del contorno
-		if( get<0>(contorno.at(medio)) == get<0>(dron) ){
-			//cout << "12" << endl;
-			//Si la altura es mayor
-			if( get<1>(contorno.at(medio)) >= get<1>(dron) ){
-				//cout << "1" << endl;
-				cout << "true" << endl;
-				return;
-			}
-			//Si la altura es menor, no necesariamente significa que no vaya
-			//a chocar. Puede darse el caso donde se termina un edificio. Habrá
-			//que verificar que la altura de la coord anterior también sea mayor.
-			else{
-				//cout << "2" << endl;
-				if( get<1>(contorno.at(medio-1)) >= get<1>(dron) ){
-					//cout << "2.1" << endl;
-					cout << "true" << endl;
-					return;
-				}
-				//El dron está más alto que la coordenada y la coord anterior.
-				else{
-					cout << "false" << endl;
-					return;
-				}
-			}
-		}
-		//Verifica cuando el dron está entre medio de 2 coordenadas
-		else if( get<0>(contorno.at(medio)) > get<0>(dron)
-					&& get<0>(contorno.at(medio-1)) <= get<0>(dron) ){
-			//cout << "34" << endl;
-			//contorno es más alto, por lo que choca
-			if( get<1>(contorno.at(medio-1)) >= get<1>(dron) ){
-				//cout << "3" << endl;
-				cout << "true" << endl;
-				return;
-			}
-			//no choca
-			else{
-				//cout << "4" << endl;
-				cout << "false" << endl;
-				return;
-			}
-		}
-		//recursividad, sigue buscando
-		else{
-			size_t n = contorno.size();
-			vectorList::const_iterator first = contorno.begin();
-			vectorList::const_iterator middle = contorno.begin() + n/2;
-			vectorList::const_iterator end = contorno.end();
-
-			if( get<0>(dron) < get<0>(contorno.at(medio)) ){
-				vectorList c1 (first,middle);
-				//cout << "5" << endl;
-				//imprimirVector(c1, 0);
-				colision(c1,dron);
-			}
-			else{
-				vectorList c2 (middle+1,end);
-				//cout << "6" << endl;
-				//imprimirVector(c2, 0);
-				colision(c2,dron);
-			}
-		}
-	}
-}*/
 
 void colision(vectorList contorno, unsigned start, unsigned end, dronCoord dron){
 	//cout << "Start: " << start << endl;
