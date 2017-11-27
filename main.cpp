@@ -4,8 +4,8 @@
 #include <vector>
 using namespace std;
 
-typedef vector< tuple<int, int, int> > vectorList;
-typedef tuple<int, int> dronCoord;
+typedef vector< tuple<unsigned int, unsigned int, unsigned int> > vectorList;
+typedef tuple<unsigned int, unsigned int> dronCoord;
 
 void imprimirVector(vectorList v, int mark){
 	cout << "[";
@@ -42,7 +42,7 @@ void compararMenorConMayor(vectorList A, auto i, vectorList B, auto j, vectorLis
 				&& get<1>(A.at(i-1)) > get<1>(B.at(j-1)) ){
 		//cout << "E" << endl;
 		c3.push_back(
-			tuple<int, int, int>(get<0>(A.at(i)), get<1>(B.at(j-1)),-1)
+			tuple<unsigned int, unsigned int, unsigned int>(get<0>(A.at(i)), get<1>(B.at(j-1)),0)
 		);
 	}
 }
@@ -51,8 +51,8 @@ vectorList obtenerContorno(vectorList edificios){
 	if(edificios.size() <= 1){
 		vectorList temp;
 		auto v = edificios.at(0);
-		temp.push_back( tuple<int, int, int>( get<0>(v),get<1>(v),-1 ) );
-		temp.push_back( tuple<int, int, int>( get<2>(v),0,-1 ) );
+		temp.push_back( tuple<unsigned int, unsigned int, unsigned int>( get<0>(v),get<1>(v), 0) );
+		temp.push_back( tuple<unsigned int, unsigned int, unsigned int>( get<2>(v),0, 0) );
 		return temp;
 	}
 	size_t n = edificios.size();
@@ -149,7 +149,7 @@ vectorList obtenerContorno(vectorList edificios){
 
 }
 
-void colision(vectorList contorno, dronCoord dron){
+/*void colision(vectorList contorno, dronCoord dron){
 	//Caso donde el dron va por el suelo, sólo por si las moscas
 	if( get<1>(dron) == 0 ){
 		cout << "true" << endl;
@@ -228,13 +228,114 @@ void colision(vectorList contorno, dronCoord dron){
 			}
 		}
 	}
+}*/
+
+void colision(vectorList contorno, unsigned start, unsigned end, dronCoord dron){
+	//cout << "Start: " << start << endl;
+	//cout << "End: " << end << endl;
+	if( get<1>(dron) == 0 ){
+		cout << "true" << endl;
+		return;
+	}
+	else{
+		//si sobrepasa al último elemento
+		if(start == end){
+			cout << "false" << endl;
+			return;
+		}
+		int medio = (end+start)/2;
+		//cout << "medio: " << medio  << endl;
+		//cout << "Mitad contorno X:" << endl;
+		//cout << get<0>(contorno.at(medio)) << endl;
+		//cout << "Dron X: " << endl;
+		//cout << get<0>(dron) << endl;
+		//Se llega al primer elemento
+		if(start == 0 && end == 1){
+			if( get<0>(dron) < get<0>(contorno.at(medio)) ){
+				cout << "false" << endl;
+				return;
+			}
+			else{
+				if( get<1>(dron) > get<1>(contorno.at(medio)) ){
+					cout << "false" << endl;
+					return;
+				}
+				else{
+					cout << "true" << endl;
+					return;
+				}
+			}
+		}
+		//Cae justo en una coordenada del contorno
+		if( get<0>(contorno.at(medio)) == get<0>(dron) ){
+			//cout << "12" << endl;
+			//Si la altura es mayor
+			if( get<1>(contorno.at(medio)) >= get<1>(dron) ){
+				//cout << "1" << endl;
+				cout << "true" << endl;
+				return;
+			}
+			//Si la altura es menor, no necesariamente significa que no vaya
+			//a chocar. Puede darse el caso donde se termina un edificio. Habrá
+			//que verificar que la altura de la coord anterior también sea mayor.
+			else{
+				//cout << "2" << endl;
+				if( get<1>(contorno.at(medio-1)) >= get<1>(dron) ){
+					//cout << "2.1" << endl;
+					cout << "true" << endl;
+					return;
+				}
+				//El dron está más alto que la coordenada y la coord anterior.
+				else{
+					cout << "false" << endl;
+					return;
+				}
+			}
+		}
+		//Verifica cuando el dron está entre medio de 2 coordenadas
+		else if( get<0>(contorno.at(medio)) > get<0>(dron)
+					&& get<0>(contorno.at(medio-1)) <= get<0>(dron) ){
+			//cout << "34" << endl;
+			//contorno es más alto, por lo que choca
+			if( get<1>(contorno.at(medio-1)) >= get<1>(dron) ){
+				//cout << "3" << endl;
+				cout << "true" << endl;
+				return;
+			}
+			//no choca
+			else{
+				//cout << "4" << endl;
+				cout << "false" << endl;
+				return;
+			}
+		}
+		//recursividad, sigue buscando
+		else{
+			//entra c1
+			if( get<0>(dron) < get<0>(contorno.at(medio)) ){
+				//cout << "5" << endl;
+				//vectorList c (contorno.begin() + start, contorno.begin() + medio);
+				//imprimirVector(c,0);
+				colision(contorno, start, medio, dron);
+			}
+			//entra c2
+			else{
+				//cout << "6" << endl;
+				//vectorList c (contorno.begin() + medio+1, contorno.begin() + end);
+				//imprimirVector(c,0);
+				colision(contorno, medio+1, end, dron);
+
+			}
+		}
+
+	}
 }
 
 int main()
 {
 	vectorList edificios, contorno;
-	int n, L, H, R;
-	int X, Y;
+	int n;
+	unsigned int X, Y, L, H, R;
 
 	//cout << "Ingrese número de edificios:" << endl;
 	cin >> n;
@@ -243,7 +344,7 @@ int main()
 	for(int i = 0; i<n; i++){
 		cin >> L >> H >> R;
 		//cout << "ingresaste: " << L << H << R << endl;
-		edificios.push_back( tuple<int, int, int>(L,H,R) );
+		edificios.push_back( tuple<unsigned int, unsigned int, unsigned int>(L,H,R) );
 	}
 
 	//cout << "Edificios: ";
@@ -267,7 +368,7 @@ int main()
 	for(int i = 0; i<n; i++){
 		cin >> X >> Y;
 		//cout << "ingresaste: " << X << Y << endl;
-		colision( contorno, tuple<int, int>(X,Y) );
+		colision( contorno, 0, contorno.size(), tuple<unsigned int, unsigned int>(X,Y) );
 	}
 
     return 0;
