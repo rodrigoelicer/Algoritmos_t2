@@ -25,18 +25,17 @@ void imprimirVector(vectorList &v, int mark){
 	cout << "]" << endl;
 }
 
-vectorList merge(vectorList &c1, vectorList &c2, unsigned int start, unsigned int end){
+vectorList merge(vectorList &c1, vectorList &c2){
 	cout << "entre merge" << endl;
 	vectorList c3;
-	unsigned middle = (start+end)/2;
-	unsigned int i = start, j = middle+1, h1 = 0, h2 = 0;
 
-	cout << "start: " << start << endl;
-	cout << "middle: " << middle << endl;
-	cout << "end: " << end << endl;
+	size_t n1 = c1.size(), n2 = c2.size();
+	unsigned int h1 = 0, h2 = 0;
+	size_t  i = 0, j = 0;
 
-	while( i < middle && j < end ){
+	while( i < n1 && j < n2 ){
 		if( get<0>(c1.at(i)) < get<0>(c2.at(j)) ){
+			cout << "1" << endl;
 			unsigned int x1 = get<0>(c1.at(i));
 			h1 = get<1>(c1.at(i));
 
@@ -46,6 +45,7 @@ vectorList merge(vectorList &c1, vectorList &c2, unsigned int start, unsigned in
 			i++;
 		}
 		else{
+			cout << "2" << endl;
 			unsigned int x2 = get<0>(c2.at(j));
 			h2 = get<1>(c2.at(j));
 
@@ -55,11 +55,13 @@ vectorList merge(vectorList &c1, vectorList &c2, unsigned int start, unsigned in
 			j++;
 		}
 	}
-	while(i < middle){
+	while(i < n1){
+		cout << "3" << endl;
 		c3.push_back(c1.at(i));
 		i++;
 	}
-	while(j < end){
+	while(j < n2){
+		cout << "4" << endl;
 		c3.push_back(c2.at(j));
 		j++;
 	}
@@ -89,7 +91,7 @@ vectorList obtenerContorno(vectorList &arr, size_t start, size_t end){
 	imprimirVector(c1,0);
 	imprimirVector(c2,0);
 
-	vectorList c3 = merge(c1,c2,start,end);
+	vectorList c3 = merge(c1,c2);
 
 	return c3;
 }
