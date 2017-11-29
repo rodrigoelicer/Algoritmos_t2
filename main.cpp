@@ -26,12 +26,13 @@ void imprimirVector(vectorList &v, int mark){
 }
 
 void compararMenorConMayor( unsigned int x1, unsigned int h1temp,
-							unsigned int h1, unsigned int h2, vectorList &c3 ){
+							unsigned int h1, unsigned int h2, unsigned int x2,
+							vectorList &c3 ){
 	if( h1temp > h2 || (h1temp == h2 && h1 > h2) ){
 		nodo nd = tuple<unsigned int, unsigned int, unsigned int>(x1,h1temp,0);
 		c3.push_back( nd );
 	}
-	else if( h1temp < h2 && h1 > h2 ){
+	else if( h1temp < h2 && h1 > h2 && x1 != x2 ){
 		nodo nd = tuple<unsigned int, unsigned int, unsigned int>(x1,h2,0);
 		c3.push_back( nd );
 	}
@@ -50,7 +51,9 @@ vectorList merge(vectorList &c1, vectorList &c2){
 			unsigned int x1 = get<0>(c1.at(i));
 			unsigned int h1temp = get<1>(c1.at(i));
 
-			compararMenorConMayor(x1, h1temp, h1, h2, c3);
+			unsigned int x2 = get<0>(c2.at(j));
+
+			compararMenorConMayor(x1, h1temp, h1, h2, x2, c3);
 
 			h1 = h1temp;
 			i++;
@@ -60,7 +63,9 @@ vectorList merge(vectorList &c1, vectorList &c2){
 			unsigned int x2 = get<0>(c2.at(j));
 			unsigned int h2temp = get<1>(c2.at(j));
 
-			compararMenorConMayor(x2, h2temp, h2, h1, c3);
+			unsigned int x1 = get<0>(c1.at(i));
+
+			compararMenorConMayor(x2, h2temp, h2, h1, x1, c3);
 
 			h2 = h2temp;
 			j++;
