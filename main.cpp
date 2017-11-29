@@ -218,14 +218,14 @@ int main()
 
 	//cout << "Ingrese número de drones:" << endl;
 	cin >> n;
-	cout << n << endl;
+	//cout << n << endl;
 
-	for(int i = 0; i<n; i++){
+	/*for(int i = 0; i<n; i++){
 		cin >> X >> Y;
 		//cout << "ingresaste: " << X << Y << endl;
 		dronCoord dron ( tuple<unsigned int, unsigned int>(X,Y) );
-		colision( contorno, 0, contorno.size(), dron );
-	}
+		//colision( contorno, 0, contorno.size(), dron );
+	}*/
 
     return 0;
 }
