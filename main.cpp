@@ -25,8 +25,19 @@ void imprimirVector(vectorList &v, int mark){
 	cout << "]" << endl;
 }
 
+void compararMenorConMayor( unsigned int x1, unsigned int h1temp,
+							unsigned int h1, unsigned int h2, vectorList &c3 ){
+	if( h1temp > h2 || (h1temp == h2 && h1 > h2) ){
+		nodo nd = tuple<unsigned int, unsigned int, unsigned int>(x1,h1temp,0);
+		c3.push_back( nd );
+	}
+	else if( h1temp < h2 && h1 > h2 ){
+		nodo nd = tuple<unsigned int, unsigned int, unsigned int>(x1,h2,0);
+		c3.push_back( nd );
+	}
+}
+
 vectorList merge(vectorList &c1, vectorList &c2){
-	cout << "entre merge" << endl;
 	vectorList c3;
 
 	size_t n1 = c1.size(), n2 = c2.size();
@@ -35,38 +46,37 @@ vectorList merge(vectorList &c1, vectorList &c2){
 
 	while( i < n1 && j < n2 ){
 		if( get<0>(c1.at(i)) < get<0>(c2.at(j)) ){
-			cout << "1" << endl;
+			//cout << "1" << endl;
 			unsigned int x1 = get<0>(c1.at(i));
-			h1 = get<1>(c1.at(i));
+			unsigned int h1temp = get<1>(c1.at(i));
 
-			unsigned int maxh = max(h1,h2);
-			nodo nd = tuple<unsigned int, unsigned int, unsigned int>(x1,maxh,0);
-			c3.push_back( nd );
+			compararMenorConMayor(x1, h1temp, h1, h2, c3);
+
+			h1 = h1temp;
 			i++;
 		}
 		else{
-			cout << "2" << endl;
+			//cout << "2" << endl;
 			unsigned int x2 = get<0>(c2.at(j));
-			h2 = get<1>(c2.at(j));
+			unsigned int h2temp = get<1>(c2.at(j));
 
-			unsigned int maxh = max(h1,h2);
-			nodo nd = tuple<unsigned int, unsigned int, unsigned int>(x2,maxh,0);
-			c3.push_back( nd );
+			compararMenorConMayor(x2, h2temp, h2, h1, c3);
+
+			h2 = h2temp;
 			j++;
 		}
 	}
 	while(i < n1){
-		cout << "3" << endl;
+		//cout << "3" << endl;
 		c3.push_back(c1.at(i));
 		i++;
 	}
 	while(j < n2){
-		cout << "4" << endl;
+		//cout << "4" << endl;
 		c3.push_back(c2.at(j));
 		j++;
 	}
-	imprimirVector(c3,0);
-	cout << "sali merge" << endl;
+	//imprimirVector(c3,0);
 	return c3;
 }
 
@@ -88,15 +98,17 @@ vectorList obtenerContorno(vectorList &arr, size_t start, size_t end){
 	vectorList c1 = obtenerContorno(arr, start, middle);
 	vectorList c2 = obtenerContorno(arr, middle+1, end);
 
+	/*cout << "Contorno1: ";
 	imprimirVector(c1,0);
-	imprimirVector(c2,0);
+	cout << "Contorno2: ";
+	imprimirVector(c2,0);*/
 
 	vectorList c3 = merge(c1,c2);
 
 	return c3;
 }
 
-void colision(vectorList &contorno, unsigned start, unsigned end, dronCoord &dron){
+void colision(vectorList &contorno, unsigned int start, unsigned int end, dronCoord &dron){
 	if( get<1>(dron) == 0 ){
 		cout << "true" << endl;
 		return;
@@ -181,18 +193,17 @@ int main()
 	int n;
 	unsigned int X, Y, L, H, R;
 
-	cout << "Ingrese número de edificios:" << endl;
 	cin >> n;
-	cout << n << endl;
+	//cout << n << endl;
 
 	for(int i = 0; i<n; i++){
 		cin >> L >> H >> R;
-		cout << "ingresaste: " << L << H << R << endl;
+		//cout << "ingresaste: " << L << H << R << endl;
 		edificios.push_back( tuple<unsigned int, unsigned int, unsigned int>(L,H,R) );
 	}
 
-	cout << "Edificios: " << endl;
-	imprimirVector(edificios,1);
+	//cout << "Edificios: " << endl;
+	//imprimirVector(edificios,1);
 
 	contorno = obtenerContorno(edificios, 0, n-1);
 
