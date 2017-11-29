@@ -20,13 +20,13 @@ void compararMenorConMayor( unsigned int x1, unsigned int h1temp,
 		nodo nd = tuple<unsigned int, unsigned int, unsigned int>(x1,h2,0);
 		c3.push_back( nd );
 	}
+	return;
 }
 
 //Une dos contornos en tiempo O(n1+n2) = O(n)
 //Retorna un contorno temporal.
-vectorList merge(vectorList &c1, vectorList &c2)
+void merge(vectorList &c3, vectorList &c1, vectorList &c2)
 {
-	vectorList c3;
 	size_t n1 = c1.size(), n2 = c2.size();
 	unsigned int h1 = 0, h2 = 0;
 	size_t  i = 0, j = 0;
@@ -65,34 +65,41 @@ vectorList merge(vectorList &c1, vectorList &c2)
 		c3.push_back(c2.at(j));
 		j++;
 	}
-	return c3;
+	return;
 }
 
 //Obtiene un contorno a partir de 2 subcontornos.El problema se divide en 2
 //partes, y se hace recursividad por ambos lados. Calcula un contorno en tiempo
 //O(nlogn).
 //Retorna un contorno.
-vectorList obtenerContorno(vectorList &arr, size_t start, size_t end)
+void obtenerContorno(vectorList &contorno, vectorList &arr, size_t start, size_t end)
 {
 	if(start == end){
-		vectorList temp;
 		nodo nd = tuple<unsigned int, unsigned int, unsigned int>(
 			get<0>(arr.at(start)), get<1>(arr.at(start)), 0
 		);
-		temp.push_back( nd );
+		contorno.push_back( nd );
 		nd = tuple<unsigned int, unsigned int, unsigned int>(
 			get<2>(arr.at(start)), 0, 0
 		);
-		temp.push_back( nd );
-		return temp;
+		contorno.push_back( nd );
+		return;
 	}
 	size_t middle = (start + end)/2;
 
-	vectorList c1 = obtenerContorno(arr, start, middle);
-	vectorList c2 = obtenerContorno(arr, middle+1, end);
+	vectorList c1, c2;
 
-	vectorList c3 = merge(c1,c2);
-	return c3;
+	c1.reserve(end-start);
+	c2.reserve(end-start);
+
+	obtenerContorno(c1, arr, start, middle);
+	obtenerContorno(c2, arr, middle+1, end);
+
+	c1.shrink_to_fit();
+	c2.shrink_to_fit();
+
+	merge(contorno,c1,c2);
+	return;
 }
 
 //Busca si un dron choca con el contorno haciendo búsqueda binaria, por ende lo
@@ -113,6 +120,11 @@ void colision(vectorList &contorno, unsigned int start,
 			return;
 		}
 		int medio = (end+start)/2;
+		if( get<0>(contorno.at(0)) > get<0>(dron)
+						|| get<0>(contorno.at(contorno.size()-1)) < get<0>(dron) ){
+			cout << "false" << endl;
+			return;
+		}
 		//Se llega al primer elemento
 		if(start == 0 && end == 1){
 			//Si el dron está antes que el contorno, retorna false
@@ -187,6 +199,7 @@ void colision(vectorList &contorno, unsigned int start,
 
 int main()
 {
+	std::ios::sync_with_stdio(false);
 	vectorList edificios, contorno;
 	int n;
 	unsigned int X, Y, L, H, R;
@@ -199,7 +212,8 @@ int main()
 		edificios.push_back( nd );
 	}
 	//Obtiene el contorno en tiempo O(nlogn).
-	contorno = obtenerContorno(edificios, 0, n-1);
+	obtenerContorno(contorno, edificios, 0, n-1);
+	edificios.clear();
 	//Imprime la cantidad de puntos del contorno, y sus coordenadas.
 	cout << contorno.size() << endl;
 	for(size_t i = 0; i<contorno.size(); i++){
